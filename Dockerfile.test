@@ -1,0 +1,12 @@
+FROM php:latest-cli
+FROM composer:latest
+
+WORKDIR /reporting_tests
+COPY . .
+RUN docker-php-ext-install pdo mysqli pdo_mysql
+RUN COMPOSER_VENDOR_DIR="/vendor" composer install
+
+CMD ["php", "/vendor/bin/phpunit", "tests"]
+
+
+
