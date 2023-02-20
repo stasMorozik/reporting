@@ -1,0 +1,9 @@
+FROM php:latest-cli
+FROM composer:latest
+
+WORKDIR /migration
+COPY . .
+RUN docker-php-ext-install pdo mysqli pdo_mysql
+RUN COMPOSER="composer.migration.json" COMPOSER_VENDOR_DIR="/vendor" composer install
+
+CMD ["php", "migrations/migration.php"]

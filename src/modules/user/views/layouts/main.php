@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use app\modules\user\assets\SignUpAssets;
 
 AppAsset::register($this);
+SignUpAssets::register($this);
 
 $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
 ?>

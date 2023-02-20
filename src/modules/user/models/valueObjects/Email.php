@@ -6,13 +6,21 @@ use app;
 
 class Email extends app\common\valueObjects\ValueObject
 {
-  public function __construct(string $email)
+  protected function __construct(string $email)
   {
     parent::__construct($email);
   }
 
-  public static function build($email): Email | app\common\errors\Domain
+  public static function build(array $args): Email | app\common\errors\Domain
   {
-    return new app\common\errors\Domain('Not implemented');
+    if (!isset($args['email'])) {
+      return new app\common\errors\Domain('Invalid argument');
+    }
+
+    if (!filter_var($args['email'], FILTER_VALIDATE_EMAIL)) {
+      return new app\common\errors\Domain('Invalid email address');
+    }
+
+    return new Email($args['email']);
   }
 }

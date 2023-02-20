@@ -18,5 +18,5 @@ abstract class ValueObject
     return $this->value;
   }
 
-  public abstract static function build($value): ValueObject | app\common\errors\Domain;
+  abstract public static function build(array $args): ValueObject | app\common\errors\Domain;
 }

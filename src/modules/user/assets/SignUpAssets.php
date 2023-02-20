@@ -1,19 +1,17 @@
 <?php
 
-namespace app\assets;
+namespace app\modules\user\assets;
 
 use yii\web\AssetBundle;
 
-class AppAsset extends AssetBundle
+class SignUpAssets extends AssetBundle
 {
   public $basePath = '@webroot';
   public $baseUrl = '@web';
-  public $css = [
-    'css/site.css',
-    'css/bootstrap.min.css'
-  ];
+  public $css = [];
 
   public $js = [
+
   ];
 
   public $depends = [
