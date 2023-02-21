@@ -1,4 +1,6 @@
-CREATE TABLE IF NOT EXISTS users(
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users(
   id BINARY(36) not null,
   name varchar(128) not null,
   surname varchar(128) not null,

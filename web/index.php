@@ -6,9 +6,8 @@ if (PHP_SAPI == 'cli-server') {
   if (is_file($file)) return false;
 }
 
-// закомментируйте следующие две строки при использовании в рабочем режиме
-defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+// defined('YII_DEBUG') or define('YII_DEBUG', true);
+// defined('YII_ENV') or define('YII_ENV', 'dev');
 
 require('../vendor/autoload.php');
 require('../vendor/yiisoft/yii2/Yii.php');

@@ -1,7 +1,7 @@
-build_db:
+run_db:
   docker run --rm --name db_reporting -v /projects/mysql_reporting/:/var/lib/mysql_reporting -e MYSQL_ROOT_PASSWORD=12345 -e MYSQL_PASSWORD=12345 -e MYSQL_USER=db_user -e MYSQL_DATABASE=reporting -e MYSQL_TCP_PORT=3308 -p 3308:3306 -d mysql:debian
 
-build_db_test:
+run_db_test:
   docker run --rm --name db_reporting_test -v /projects/mysql_reporting_test/:/var/lib/mysql_reporting_test -e MYSQL_ROOT_PASSWORD=12345 -e MYSQL_PASSWORD=12345 -e MYSQL_USER=db_user -e MYSQL_DATABASE=reporting -e MYSQL_TCP_PORT=3309 -p 3309:3306 -d mysql:debian
 
 build_migration:
@@ -20,7 +20,7 @@ build_tests:
   docker build -f Dockerfile.test ./  -t reporting_tests
 
 tests:
-  docker run --rm --name reporting_tests -v /projects/reporting:/reporting_tests reporting_tests
+  docker run --rm --name reporting_tests -v /projects/reporting:/tests reporting_tests
 
 build:
   docker build -f Dockerfile ./  -t reporting_app

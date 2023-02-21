@@ -14,7 +14,9 @@ DB::$port = $_ENV["DB_PORT"];
 DB::$encoding = 'utf8';
 DB::$connect_options = array(MYSQLI_OPT_CONNECT_TIMEOUT => 10);
 
-DB::query("CREATE TABLE IF NOT EXISTS users(
+DB::query("DROP TABLE IF EXISTS users");
+
+DB::query("CREATE TABLE users(
   id BINARY(36) not null,
   name varchar(128) not null,
   surname varchar(128) not null,

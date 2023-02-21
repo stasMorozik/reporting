@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 ?>
 <div class="my-5 d-flex justify-content-center">
-  <?= Html::beginForm(['/users/'], 'post', ['class' => 'col-xxl-4 col-xl-4 col-lg-4 col-12']) ?>
+  <?= Html::beginForm(['/users/'], 'get', ['class' => 'col-xxl-4 col-xl-4 col-lg-4 col-12', 'id' => 'signUpForm', 'name' => 'signUpForm']) ?>
     <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
       <input autocomplete="off" type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp">
@@ -43,7 +43,7 @@ use yii\helpers\Html;
     </div>
     <div class="mb-3">
       <label for="confirmPassword" class="form-label">Confirm password</label>
-      <input autocomplete="off" type="password" class="form-control" name="confirmPassword" id="confirmPassword" aria-describedby="confirmPasswordHelp">
+      <input autocomplete="off" type="password" class="form-control" name="confirm_password" id="confirmPassword" aria-describedby="confirmPasswordHelp">
       <div id="confirmPasswordHelp" class="form-text">Confirm your password.</div>
     </div>
     <a href="/users/new" id="cancelForm" class="btn btn-danger">Cancel</a>

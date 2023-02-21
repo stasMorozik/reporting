@@ -4,17 +4,27 @@ namespace app\modules\user\activeQuery;
 
 use app;
 use yii;
+use Exception;
 
 class Creating
 {
+  private yii\db\Connection $db;
+
+  public function __construct(
+    yii\db\Connection $db
+  )
+  {
+    $this->db = $db;
+  }
+
   public function create(app\modules\user\models\Entity $user): app\common\errors\Infrastructure | bool
   {
-    $transaction = yii::$app->db->beginTransaction();
+    $transaction = $this->db->beginTransaction();
 
     try {
-      yii::$app->db->createCommand()->insert('users', [
+      $this->db->createCommand()->insert('users', [
         'id' => $user->getId(),
-        'created' => $user->getCreated(),
+        'created' => $user->getCreated()->format('Y-m-d h:m'),
         'name' => $user->getName()->getValue(),
         'surname' => $user->getSurname()->getValue(),
         'email' => $user->getEmail()->getValue(),
@@ -23,13 +33,16 @@ class Creating
         'department' => $user->getDepartment()->getValue()
       ])->execute();
 
+      $transaction->commit();
+
       return true;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       $transaction->rollBack();
 
-      if ($e->getCode() == 1062) {
+      if ($e->getCode() == 23000) {
         return new app\common\errors\Infrastructure('User already exists');
       }
+
       throw $e;
     }
   }
