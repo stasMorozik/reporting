@@ -28,5 +28,24 @@ class Module extends \yii\base\Module
     yii::$container->setSingleton('app\modules\user\services\Registration', 'app\modules\user\services\Registration', [
       $registration_use_case
     ]);
+
+    yii::$container->setSingleton('app\modules\user\activeQueries\Getting', 'app\modules\user\activeQueries\Getting', [
+      yii::$app->db
+    ]);
+
+    $getting_adapter = yii::$container->get('app\modules\user\activeQueries\Getting');
+
+    yii::$container->setSingleton('app\modules\user\useCases\Authentication', 'app\modules\user\useCases\Authentication', [
+      $_ENV["PASSWORD_SALT"],
+      $_ENV["ACCESS_TOKEN_SALT"],
+      $_ENV["REFRESH_TOKEN_SALT"],
+      $getting_adapter
+    ]);
+
+    $authentication_use_case = yii::$container->get('app\modules\user\useCases\Authentication');
+
+    yii::$container->setSingleton('app\modules\user\services\Authentication', 'app\modules\user\services\Authentication', [
+      $authentication_use_case
+    ]);
   }
 }

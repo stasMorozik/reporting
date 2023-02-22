@@ -4,7 +4,7 @@ namespace app\modules\user\controllers;
 
 use yii;
 
-class NewController extends yii\web\Controller
+class AuthController extends yii\web\Controller
 {
   public function actionIndex()
   {

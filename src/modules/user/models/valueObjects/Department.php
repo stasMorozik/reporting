@@ -13,7 +13,7 @@ class Department extends app\common\valueObjects\ValueObject
   const IT = 'IT';
   const PURCHASING = 'PURCHASING';
 
-  protected function __construct(string $department)
+  public function __construct(string $department)
   {
     parent::__construct($department);
   }

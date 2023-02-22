@@ -17,7 +17,6 @@ class RegistrationTest extends TestCase
   protected static $surname = 'Surname';
   protected static $email = 'name@gmail.com';
   protected static $password = '12345';
-  protected static $salt = 'some_secret';
   protected static $role = 'User';
   protected static $department = 'It';
 

@@ -6,7 +6,7 @@ use app;
 
 class Password extends app\common\valueObjects\ValueObject
 {
-  protected function __construct(string $password)
+  public function __construct(string $password)
   {
     parent::__construct($password);
   }

@@ -38,6 +38,9 @@ return [
   'modules' => [
     'users' => [
       'class' => 'app\modules\user\Module'
+    ],
+    'reports' => [
+      'class' => 'app\modules\reports\Module'
     ]
   ]
 ];

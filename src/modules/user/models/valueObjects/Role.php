@@ -9,7 +9,7 @@ class Role extends app\common\valueObjects\ValueObject
   const ADMIN = 'ADMIN';
   const USER = 'USER';
 
-  protected function __construct(string $role)
+  public function __construct(string $role)
   {
     parent::__construct($role);
   }

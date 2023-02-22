@@ -15,7 +15,7 @@ class Entity extends app\common\Entity
   private app\modules\user\models\valueObjects\Role $role;
   private app\modules\user\models\valueObjects\Department $department;
 
-  protected function __construct(
+  public function __construct(
     string $id,
     DateTime $created,
     app\modules\user\models\valueObjects\Email $email,

@@ -18,7 +18,7 @@ class Registration
     $this->password_salt = $password_salt;
   }
 
-  public function registry(array $args)
+  public function registry(array $args): app\common\errors\Infrastructure | app\common\errors\Domain | bool
   {
     $maybe_user = app\modules\user\models\Entity::build(array_merge($args, ['salt' => $this->password_salt]));
 

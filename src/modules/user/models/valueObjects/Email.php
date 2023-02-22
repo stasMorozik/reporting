@@ -6,7 +6,7 @@ use app;
 
 class Email extends app\common\valueObjects\ValueObject
 {
-  protected function __construct(string $email)
+  public function __construct(string $email)
   {
     parent::__construct($email);
   }

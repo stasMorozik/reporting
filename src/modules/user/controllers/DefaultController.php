@@ -24,14 +24,6 @@ class DefaultController extends yii\web\Controller
   {
     $request = yii::$app->request;
 
-    if ($request->isGet) {
-      $result = $this->registration_service->registry(yii::$app->request->get());
-      return $this->redirect(yii\helpers\Url::toRoute([
-        '/users/new',
-        'success' => $result['success'],
-        'message' => $result['message']
-      ], true));
-    }
     if ($request->isPost) {
       $result = $this->registration_service->registry(yii::$app->request->post());
       return $this->redirect(yii\helpers\Url::toRoute([
@@ -40,5 +32,7 @@ class DefaultController extends yii\web\Controller
         'message' => $result['message']
       ], true));
     }
+
+    return $this->redirect(yii\helpers\Url::toRoute(['/users/new'], true));
   }
 }

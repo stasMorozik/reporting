@@ -55,5 +55,6 @@ use yii\helpers\Html;
       <a href="/users/new" id="cancelForm" class="btn btn-danger">Cancel</a>
       <button type="submit" form="signUpForm" class="btn btn-success">Ok</button>
     <?= Html::endForm() ?>
+    <div class="my-3 fw-light">Already have login and password? <a href="/users/auth" class="link-primary">Sign in</a></div>
   </div>
 </div>

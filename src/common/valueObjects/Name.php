@@ -6,7 +6,7 @@ use app;
 
 class Name extends app\common\valueObjects\ValueObject
 {
-  protected function __construct(string $name)
+  public function __construct(string $name)
   {
     parent::__construct($name);
   }
