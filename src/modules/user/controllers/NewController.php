@@ -3,12 +3,31 @@
 namespace app\modules\user\controllers;
 
 use yii;
+use app;
 
 class NewController extends yii\web\Controller
 {
+  protected app\modules\user\services\Authorization $authorization_service;
+
+  public function __construct(
+    $id,
+    $module,
+    app\modules\user\services\Authorization $authorization_service,
+    $config = []
+  )
+  {
+    $this->authorization_service = $authorization_service;
+    parent::__construct($id, $module, $config);
+  }
+
   public function actionIndex()
   {
-    $request = yii::$app->request;
+    $maybe_user = $this->authorization_service->auth();
+    if ($maybe_user['success']) {
+      return $this->redirect(yii\helpers\Url::toRoute([
+        '/reports/',
+      ], true));
+    }
 
     return $this->render('index', ['result' => yii::$app->request->get()]);
   }

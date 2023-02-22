@@ -77,12 +77,16 @@ class Session extends app\common\Entity
 
   public static function decode(array $args): app\common\errors\Domain | string
   {
-    if (!isset($args['access_token_salt'])) {
+    if (!array_key_exists('access_token_salt', $args)) {
       return new app\common\errors\Domain('Invalid argument');
     }
 
-    if (!isset($args['access_token'])) {
+    if (!array_key_exists('access_token', $args)) {
       return new app\common\errors\Domain('Invalid argument');
+    }
+
+    if (!$args['access_token']) {
+      return new app\common\errors\Domain('Invalid token');
     }
 
     try {
@@ -108,16 +112,20 @@ class Session extends app\common\Entity
 
   public static function refresh(array $args)
   {
-    if (!isset($args['access_token_salt'])) {
+    if (!array_key_exists('access_token_salt', $args)) {
       return new app\common\errors\Domain('Invalid argument');
     }
 
-    if (!isset($args['refresh_token_salt'])) {
+    if (!array_key_exists('refresh_token_salt', $args)) {
       return new app\common\errors\Domain('Invalid argument');
     }
 
-    if (!isset($args['refresh_token'])) {
+    if (!array_key_exists('refresh_token', $args)) {
       return new app\common\errors\Domain('Invalid argument');
+    }
+
+    if (!$args['refresh_token']) {
+      return new app\common\errors\Domain('Invalid token');
     }
 
     try {

@@ -10,7 +10,10 @@ return [
   'aliases' => [
     '@app' => __DIR__.'/src'
   ],
-  'bootstrap' => ['log'],
+  'bootstrap' => [
+    'log',
+    'users'
+  ],
   'components' => [
     'request' => [
       'cookieValidationKey' => '123',

@@ -47,5 +47,29 @@ class Module extends \yii\base\Module
     yii::$container->setSingleton('app\modules\user\services\Authentication', 'app\modules\user\services\Authentication', [
       $authentication_use_case
     ]);
+
+    yii::$container->setSingleton('app\modules\user\activeQueries\GettingById', 'app\modules\user\activeQueries\GettingById', [
+      yii::$app->db
+    ]);
+
+    $getting_by_id_adapter = yii::$container->get('app\modules\user\activeQueries\GettingById');
+
+    yii::$container->setSingleton('app\modules\user\useCases\Authorization', 'app\modules\user\useCases\Authorization', [
+      $_ENV["ACCESS_TOKEN_SALT"],
+      $getting_by_id_adapter
+    ]);
+
+    yii::$container->setSingleton('app\modules\user\useCases\RefreshSession', 'app\modules\user\useCases\RefreshSession', [
+      $_ENV["ACCESS_TOKEN_SALT"],
+      $_ENV["REFRESH_TOKEN_SALT"],
+    ]);
+
+    $authorization_use_case = yii::$container->get('app\modules\user\useCases\Authorization');
+    $refresh_session_use_case = yii::$container->get('app\modules\user\useCases\RefreshSession');
+
+    yii::$container->setSingleton('app\modules\user\services\Authorization', 'app\modules\user\services\Authorization', [
+      $authorization_use_case,
+      $refresh_session_use_case
+    ]);
   }
 }
