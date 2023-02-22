@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tests\user\activeQuery;
+namespace tests\user\activeQueries;
 
 use PHPUnit\Framework\TestCase;
 use yii;
@@ -10,7 +10,7 @@ use tests;
 class CreatingTest extends TestCase
 {
   protected static yii\db\Connection $db;
-  protected static app\modules\user\activeQuery\Creating $creating_adapter;
+  protected static app\modules\user\activeQueries\Creating $creating_adapter;
 
   protected static $name = 'Name';
   protected static $surname = 'Surname';
@@ -30,7 +30,7 @@ class CreatingTest extends TestCase
   public static function setUpBeforeClass(): void
   {
     self::$db = tests\Bootstrap::factory();
-    self::$creating_adapter = new app\modules\user\activeQuery\Creating(self::$db);
+    self::$creating_adapter = new app\modules\user\activeQueries\Creating(self::$db);
     self::$user = app\modules\user\models\Entity::build([
       'email' => self::$email,
       'name' => self::$name,

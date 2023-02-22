@@ -12,17 +12,21 @@ class Module extends \yii\base\Module
     yii::configure($this, require __DIR__ . '/config/config.php');
     $this->layout = 'main';
 
-    $db = yii::$container->get('yii\db\Connection');
-
-    yii::$container->setSingleton('app\modules\user\activeQuery\Creating', 'app\modules\user\activeQuery\Creating', [
-      $db
+    yii::$container->setSingleton('app\modules\user\activeQueries\Creating', 'app\modules\user\activeQueries\Creating', [
+      yii::$app->db
     ]);
 
-    $createng_adapter = yii::$container->get('app\modules\user\activeQuery\Creating');
+    $createng_adapter = yii::$container->get('app\modules\user\activeQueries\Creating');
 
     yii::$container->setSingleton('app\modules\user\useCases\Registration', 'app\modules\user\useCases\Registration', [
       $_ENV["PASSWORD_SALT"],
       $createng_adapter
+    ]);
+
+    $registration_use_case = yii::$container->get('app\modules\user\useCases\Registration');
+
+    yii::$container->setSingleton('app\modules\user\services\Registration', 'app\modules\user\services\Registration', [
+      $registration_use_case
     ]);
   }
 }

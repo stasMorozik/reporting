@@ -36,3 +36,8 @@ tests/_support/_generated
 /.vagrant
 
 /web/assets
+
+*.env
+*.env.test
+*.vstags
+###< symfony/phpunit-bridge ###

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace app\modules\user\activeQuery;
+namespace app\modules\user\activeQueries;
 
 use app;
 use yii;

@@ -10,7 +10,7 @@ use tests;
 class RegistrationTest extends TestCase
 {
   protected static yii\db\Connection $db;
-  protected static app\modules\user\activeQuery\Creating $creating_adapter;
+  protected static app\modules\user\activeQueries\Creating $creating_adapter;
   protected static app\modules\user\useCases\Registration $registration_use_case;
 
   protected static $name = 'Name';
@@ -31,7 +31,7 @@ class RegistrationTest extends TestCase
   public static function setUpBeforeClass(): void
   {
     self::$db = tests\Bootstrap::factory();
-    self::$creating_adapter = new app\modules\user\activeQuery\Creating(self::$db);
+    self::$creating_adapter = new app\modules\user\activeQueries\Creating(self::$db);
     self::$registration_use_case = new app\modules\user\useCases\Registration(
       self::$password_salt,
       self::$creating_adapter

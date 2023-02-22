@@ -7,16 +7,16 @@ use app;
 
 class DefaultController extends yii\web\Controller
 {
-  protected app\modules\user\useCases\Registration $registration_use_case;
+  protected app\modules\user\services\Registration $registration_service;
 
   public function __construct(
     $id,
     $module,
-    app\modules\user\useCases\Registration $registration_use_case,
+    app\modules\user\services\Registration $registration_service,
     $config = []
   )
   {
-    $this->registration_use_case = $registration_use_case;
+    $this->registration_service = $registration_service;
     parent::__construct($id, $module, $config);
   }
 
@@ -25,12 +25,20 @@ class DefaultController extends yii\web\Controller
     $request = yii::$app->request;
 
     if ($request->isGet) {
-      $maybe_true = $this->registration_use_case->registry(yii::$app->request->get());
-      return $this->redirect(yii\helpers\Url::toRoute(["/users/new"], true));
+      $result = $this->registration_service->registry(yii::$app->request->get());
+      return $this->redirect(yii\helpers\Url::toRoute([
+        '/users/new',
+        'success' => $result['success'],
+        'message' => $result['message']
+      ], true));
     }
     if ($request->isPost) {
-      $maybe_true = $this->registration_use_case->registry(yii::$app->request->post());
-      return $this->redirect(yii\helpers\Url::toRoute(["/users/new", "post" => yii::$app->request->post()], true));
+      $result = $this->registration_service->registry(yii::$app->request->post());
+      return $this->redirect(yii\helpers\Url::toRoute([
+        '/users/new',
+        'success' => $result['success'],
+        'message' => $result['message']
+      ], true));
     }
   }
 }

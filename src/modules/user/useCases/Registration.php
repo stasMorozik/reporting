@@ -6,12 +6,12 @@ use app;
 
 class Registration
 {
-  private app\modules\user\activeQuery\Creating $creating_adapter;
+  private app\modules\user\activeQueries\Creating $creating_adapter;
   private string $password_salt;
 
   public function __construct(
     string $password_salt,
-    app\modules\user\activeQuery\Creating $creating_adapter
+    app\modules\user\activeQueries\Creating $creating_adapter
   )
   {
     $this->creating_adapter = $creating_adapter;
@@ -26,6 +26,6 @@ class Registration
       return $maybe_user;
     }
 
-    $this->creating_adapter->create($maybe_user);
+    return $this->creating_adapter->create($maybe_user);
   }
 }

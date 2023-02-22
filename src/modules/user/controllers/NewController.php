@@ -10,7 +10,7 @@ class NewController extends yii\web\Controller
   {
     $request = yii::$app->request;
     if ($request->isGet) {
-      return $this->render('index');
+      return $this->render('index', ['result' => yii::$app->request->get()]);
     }
   }
 }
