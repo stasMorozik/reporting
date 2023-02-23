@@ -6,7 +6,7 @@ use app;
 
 abstract class ValueObject
 {
-  private $value;
+  private mixed $value;
 
   public function __construct($value)
   {

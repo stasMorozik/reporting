@@ -43,7 +43,7 @@ return [
       'class' => 'app\modules\user\Module'
     ],
     'reports' => [
-      'class' => 'app\modules\reports\Module'
+      'class' => 'app\modules\report\Module'
     ]
   ]
 ];

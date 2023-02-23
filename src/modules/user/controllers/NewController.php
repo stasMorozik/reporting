@@ -23,6 +23,7 @@ class NewController extends yii\web\Controller
   public function actionIndex()
   {
     $maybe_user = $this->authorization_service->auth();
+
     if ($maybe_user['success']) {
       return $this->redirect(yii\helpers\Url::toRoute([
         '/reports/',

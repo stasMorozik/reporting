@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS reports;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
@@ -10,4 +11,17 @@ CREATE TABLE users(
   email varchar(128) unique not null,
   password varchar(128) not null,
   primary key(id)
+);
+
+CREATE TABLE reports(
+  id BINARY(36) not null,
+  title varchar(128) not null,
+  description text,
+  owner_id BINARY(36) not null,
+  created date not null,
+  primary key(id),
+  CONSTRAINT `fk_user_report`
+    FOREIGN KEY (owner_id) REFERENCES users (id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT
 );

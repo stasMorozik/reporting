@@ -8,11 +8,11 @@ use Exception;
 
 class Authorization
 {
-  private app\modules\user\useCases\Authorization $authorization_use_case;
+  private app\modules\user\useCases\interfaces\Authorization $authorization_use_case;
   private app\modules\user\useCases\RefreshSession $refresh_session_use_case;
 
   public function __construct(
-    app\modules\user\useCases\Authorization $authorization_use_case,
+    app\modules\user\useCases\interfaces\Authorization $authorization_use_case,
     app\modules\user\useCases\RefreshSession $refresh_session_use_case
   )
   {
