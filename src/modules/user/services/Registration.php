@@ -2,6 +2,7 @@
 
 namespace app\modules\user\services;
 
+use yii;
 use app;
 use Exception;
 
@@ -22,12 +23,26 @@ class Registration
       $maybe_true = $this->use_case->registry($args);
 
       if ($maybe_true !== true) {
-        return ['success' => false, 'message' => $maybe_true->getMessage()];
+        yii::$app->response->redirect([
+          '/users/new',
+          'success' => false,
+          'message' => $maybe_true->getMessage()
+        ]);
       }
 
-      return ['success' => true, 'message' => 'You have successfully registered'];
+      if ($maybe_true === true) {
+        yii::$app->response->redirect([
+          '/users/new',
+          'success' => true,
+          'message' => 'You have successfully registered'
+        ]);
+      }
     } catch(Exception $e) {
-      return ['success' => false, 'message' => 'Something went wrong'];
+      yii::$app->response->redirect([
+        '/users/new',
+        'success' => false,
+        'message' => 'Something went wrong'
+      ]);
     }
   }
 }

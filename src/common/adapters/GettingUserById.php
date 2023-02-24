@@ -6,13 +6,13 @@ use app;
 
 class GettingUserById implements app\modules\user\activeQueries\interfaces\GettingById
 {
-  private array $users;
+  public array $users;
 
   public function __construct(
-    &$users
+    $users
   )
   {
-    $this->users = &$users;
+    $this->users = $users;
   }
 
   public function get(

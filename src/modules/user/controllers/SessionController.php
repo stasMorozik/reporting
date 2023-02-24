@@ -22,26 +22,12 @@ class SessionController extends yii\web\Controller
 
   public function actionIndex()
   {
-    $request = yii::$app->request;
-
-    if ($request->isPost) {
-      $result = $this->authentication_service->auth(yii::$app->request->post());
-
-      if ($result['success']) {
-        return $this->redirect(yii\helpers\Url::toRoute([
-          '/reports/',
-        ], true));
-      }
-
-      if (!$result['success']) {
-        return $this->redirect(yii\helpers\Url::toRoute([
-          '/users/auth',
-          'success' => $result['success'],
-          'message' => $result['message']
-        ], true));
-      }
+    if (yii::$app->request->isPost) {
+      $this->authentication_service->auth(yii::$app->request->post());
     }
 
-    return $this->redirect(yii\helpers\Url::toRoute(['/users/auth'], true));
+    if (!yii::$app->request->isPost) {
+      return $this->redirect(yii\helpers\Url::toRoute(['/users/auth'], true));
+    }
   }
 }

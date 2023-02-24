@@ -35,34 +35,39 @@ class Entity extends app\common\Entity
     parent::__construct($id, $created);
   }
 
-  public function getEmail()
+  public function getEmail(): app\modules\user\models\valueObjects\Email
   {
     return $this->email;
   }
 
-  public function getName()
+  public function getName(): app\common\valueObjects\Name
   {
     return $this->name;
   }
 
-  public function getSurname()
+  public function getSurname(): app\common\valueObjects\Name
   {
     return $this->surname;
   }
 
-  public function getPassword()
+  public function getPassword(): app\modules\user\models\valueObjects\Password
   {
     return $this->password;
   }
 
-  public function getRole()
+  public function getRole(): app\modules\user\models\valueObjects\Role
   {
     return $this->role;
   }
 
-  public function getDepartment()
+  public function getDepartment(): app\modules\user\models\valueObjects\Department
   {
     return $this->department;
+  }
+
+  public function isAdmin(): bool
+  {
+    return $this->getRole()->getValue() == app\modules\user\models\valueObjects\Role::ADMIN;
   }
 
   public static function build(array $args):  Entity | app\common\errors\Domain

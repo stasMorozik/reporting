@@ -22,17 +22,12 @@ class DefaultController extends yii\web\Controller
 
   public function actionIndex()
   {
-    $request = yii::$app->request;
-
-    if ($request->isPost) {
-      $result = $this->registration_service->registry(yii::$app->request->post());
-      return $this->redirect(yii\helpers\Url::toRoute([
-        '/users/new',
-        'success' => $result['success'],
-        'message' => $result['message']
-      ], true));
+    if (yii::$app->request->isPost) {
+      $this->registration_service->registry(yii::$app->request->post());
     }
 
-    return $this->redirect(yii\helpers\Url::toRoute(['/users/new'], true));
+    if (!yii::$app->request->isPost) {
+      return $this->redirect(yii\helpers\Url::toRoute(['/users/d'], true));
+    }
   }
 }

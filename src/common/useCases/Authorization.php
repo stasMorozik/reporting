@@ -4,13 +4,15 @@ namespace app\common\useCases;
 
 use app;
 
-class Authorization extends app\modules\user\useCases\Authorization
+class Authorization implements app\modules\user\useCases\interfaces\Authorization
 {
+  private app\modules\user\activeQueries\interfaces\GettingById $getting_adapter;
+
   public function __construct(
     app\modules\user\activeQueries\interfaces\GettingById $getting_adapter
   )
   {
-    parent::__construct(' ', $getting_adapter);
+    $this->getting_adapter = $getting_adapter;
   }
 
   public function auth(

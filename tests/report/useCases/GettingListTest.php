@@ -1,32 +1,44 @@
 <?php declare(strict_types=1);
 
-namespace tests\report\activeQueries;
+namespace tests\user\useCases;
 
 use PHPUnit\Framework\TestCase;
 use yii;
 use app;
 use tests;
-use DateTime;
 
 class GettingListTest extends TestCase
 {
   protected static yii\db\Connection $db;
-  protected static app\modules\report\activeQueries\GettingList $getting_adapter;
+  protected static app\modules\report\activeQueries\GettingList $getting_list_adapter;
+
+  protected static app\modules\user\activeQueries\GettingById $getting_user_by_id_adapter;
+
+  protected static app\modules\user\useCases\Authorization $authorization_use_case;
+
+  protected static app\modules\report\useCases\GettingList $getting_list_use_case;
 
   protected static $name = 'Name';
   protected static $surname = 'Surname';
   protected static $email = 'name@gmail.com';
   protected static $other_email = 'name1@gmail.com';
   protected static $password = '12345';
-  protected static $salt = 'some_secret';
-  protected static $role = 'User';
+  protected static $role = 'Admin';
+  protected static $other_role = 'User';
   protected static $department = 'It';
   protected static $other_department = 'Store';
+
+  protected static $password_salt = 'some_salt';
+  protected static $access_token_salt = 'some_salt?';
+  protected static $refresh_token_salt = 'some_salt!';
 
   protected static app\modules\user\models\Entity $user;
   protected static app\modules\user\models\Entity $other_user;
   protected static app\modules\report\models\Entity $report;
   protected static app\modules\report\models\Entity $other_report;
+
+  protected static app\modules\user\models\entities\Session $session;
+  protected static app\modules\user\models\entities\Session $other_session;
 
   protected function tearDown(): void
   {
@@ -36,7 +48,20 @@ class GettingListTest extends TestCase
   public static function setUpBeforeClass(): void
   {
     self::$db = tests\Bootstrap::factory();
-    self::$getting_adapter = new app\modules\report\activeQueries\GettingList(self::$db);
+    self::$getting_list_adapter = new app\modules\report\activeQueries\GettingList(self::$db);
+
+    self::$getting_user_by_id_adapter = new app\modules\user\activeQueries\GettingById(self::$db);
+
+    self::$authorization_use_case = new app\modules\user\useCases\Authorization(
+      self::$access_token_salt,
+      self::$getting_user_by_id_adapter
+    );
+
+    self::$getting_list_use_case = new app\modules\report\useCases\GettingList(
+      self::$authorization_use_case,
+      self::$getting_list_adapter
+    );
+
     self::$user = app\modules\user\models\Entity::build([
       'email' => self::$email,
       'name' => self::$name,
@@ -45,7 +70,7 @@ class GettingListTest extends TestCase
       'confirm_password' => self::$password,
       'role' => self::$role,
       'department' => self::$department,
-      'salt' => self::$salt
+      'salt' => self::$password_salt
     ]);
 
     self::$other_user = app\modules\user\models\Entity::build([
@@ -54,9 +79,9 @@ class GettingListTest extends TestCase
       'surname' => self::$surname,
       'password' => self::$password,
       'confirm_password' => self::$password,
-      'role' => self::$role,
+      'role' => self::$other_role,
       'department' => self::$other_department,
-      'salt' => self::$salt
+      'salt' => self::$password_salt
     ]);
 
     self::$report = app\modules\report\models\Entity::build([
@@ -69,6 +94,18 @@ class GettingListTest extends TestCase
       'title' => 'Some title',
       'description' => 'Some description',
       'owner' => self::$other_user
+    ]);
+
+    self::$session = app\modules\user\models\entities\Session::build([
+      'access_token_salt' => self::$access_token_salt,
+      'refresh_token_salt' => self::$refresh_token_salt,
+      'id' => self::$user->getId()
+    ]);
+
+    self::$other_session = app\modules\user\models\entities\Session::build([
+      'access_token_salt' => self::$access_token_salt,
+      'refresh_token_salt' => self::$refresh_token_salt,
+      'id' => self::$other_user->getId()
     ]);
   }
 
@@ -119,28 +156,38 @@ class GettingListTest extends TestCase
 
   public function testGetList(): void
   {
-    $rows = self::$getting_adapter->get(
-      new app\modules\report\models\valueObjects\Page(0),
-      new app\modules\report\models\valueObjects\Limit(10),
-      new app\modules\user\models\valueObjects\Email(self::$email),
-      new app\common\valueObjects\Name(self::$surname),
-      new app\modules\user\models\valueObjects\Department(
-        app\modules\user\models\valueObjects\Department::IT
-      ),
-      new DateTime(),
-      new DateTime()
-    );
+    $maybe_rows = self::$getting_list_use_case->get([
+      'access_token' => self::$session->getAccessToken(),
+      'page' => 1,
+      'limit' => 10,
+      'email' => self::$email
+    ]);
 
     $this->assertSame(
       true,
-      is_array($rows)
+      is_array($maybe_rows)
     );
 
-    $report = array_pop($rows);
+    $report = array_pop($maybe_rows);
 
     $this->assertSame(
       self::$email,
       $report->getOwner()->getEmail()->getValue()
+    );
+  }
+
+  public function testHaveNotRight(): void
+  {
+    $maybe_rows = self::$getting_list_use_case->get([
+      'access_token' => self::$other_session->getAccessToken(),
+      'page' => 1,
+      'limit' => 10,
+      'email' => self::$email
+    ]);
+
+    $this->assertInstanceOf(
+      app\common\errors\HaveNotRight::class,
+      $maybe_rows
     );
   }
 }

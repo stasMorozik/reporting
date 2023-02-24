@@ -20,7 +20,29 @@ class Authorization
     $this->refresh_session_use_case = $refresh_session_use_case;
   }
 
-  public function auth()
+  public function auth(bool $is_auth = false)
+  {
+    $maybe_user = $this->_auth();
+    if (!$is_auth) {
+      if ($maybe_user instanceof app\modules\user\models\Entity) {
+        yii::$app->response->redirect([
+          '/reports/'
+        ]);
+      }
+    }
+
+    if ($is_auth) {
+      if (($maybe_user instanceof app\modules\user\models\Entity) == false) {
+        yii::$app->response->redirect([
+          '/users/auth',
+          'success' => false,
+          'message' => $maybe_user->getMessage()
+        ]);
+      }
+    }
+  }
+
+  private function _auth()
   {
     try {
       $session = yii::$app->session;
@@ -30,37 +52,25 @@ class Authorization
       ]);
 
       if ($maybe_user instanceof app\common\errors\Domain) {
-
         $maybe_session = $this->refresh_session_use_case->refresh([
           'refresh_token' => $session->get('refresh_token')
         ]);
 
-        if (($maybe_session instanceof app\modules\user\models\entities\Session) == false) {
-          return ['success' => false, 'result' => $maybe_session->getMessage()];
+        if ($maybe_session instanceof app\common\errors\Domain) {
+          return $maybe_session;
         }
 
         $session->set('access_token', $maybe_session->getAccessToken());
         $session->set('refresh_token', $maybe_session->getRefreshToken());
 
-        $maybe_user = $this->authorization_use_case->auth([
+        return $this->authorization_use_case->auth([
           'access_token' => $maybe_session->getAccessToken()
         ]);
-
-        if (($maybe_user instanceof app\modules\user\models\Entity) == false) {
-          return ['success' => false, 'result' => $maybe_user->getMessage()];
-        }
-
-        return ['success' => true, 'result' => $maybe_user];
       }
 
-      if ($maybe_user instanceof app\common\errors\Infrastructure) {
-        return ['success' => false, 'result' => $maybe_user->getMessage()];
-      }
-
-      return ['success' => true, 'result' => $maybe_user];
-
+      return $maybe_user;
     } catch(Exception $e) {
-      return ['success' => false, 'result' => 'Something went wrong'];
+      return new app\common\errors\Infrastructure('Something went wrong');
     }
   }
 }

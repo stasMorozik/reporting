@@ -23,7 +23,7 @@ DB::query("CREATE TABLE users(
   surname varchar(128) not null,
   role varchar(16) not null,
   department varchar(16) not null,
-  created date not null,
+  created datetime not null,
   email varchar(128) unique not null,
   password varchar(128) not null,
   primary key(id)
@@ -34,7 +34,7 @@ DB::query("CREATE TABLE reports(
   title varchar(128) not null,
   description text,
   owner_id BINARY(36) not null,
-  created date not null,
+  created datetime not null,
   primary key(id),
   CONSTRAINT `fk_user_report`
     FOREIGN KEY (owner_id) REFERENCES users (id)

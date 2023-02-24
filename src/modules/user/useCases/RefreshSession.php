@@ -25,7 +25,7 @@ class RefreshSession
     return app\modules\user\models\entities\Session::refresh(array_merge(
       $args,
       [
-        'access_token_salt' => $this->refresh_token_salt,
+        'access_token_salt' => $this->access_token_salt,
         'refresh_token_salt' => $this->refresh_token_salt
       ]
     ));

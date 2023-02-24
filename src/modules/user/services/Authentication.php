@@ -23,18 +23,28 @@ class Authentication
       $maybe_session = $this->use_case->auth($args);
 
       if (($maybe_session instanceof app\modules\user\models\entities\Session) == false) {
-        return ['success' => false, 'message' => $maybe_session->getMessage()];
+        yii::$app->response->redirect([
+          '/users/auth',
+          'success' => false,
+          'message' => $maybe_session->getMessage()
+        ]);
       }
 
-      $session = yii::$app->session;
-      $session->open();
+      if ($maybe_session instanceof app\modules\user\models\entities\Session) {
+        $session = yii::$app->session;
+        $session->open();
 
-      $session->set('access_token', $maybe_session->getAccessToken());
-      $session->set('refresh_token', $maybe_session->getRefreshToken());
+        $session->set('access_token', $maybe_session->getAccessToken());
+        $session->set('refresh_token', $maybe_session->getRefreshToken());
 
-      return ['success' => true, 'message' => 'You have successfully authenticated'];
+        yii::$app->response->redirect(['/reports/']);
+      }
     } catch(Exception $e) {
-      return ['success' => false, 'message' => 'Something went wrong'];
+      yii::$app->response->redirect([
+        '/reports/',
+        'success' => false,
+        'message' => 'Something went wrong'
+      ]);
     }
   }
 }

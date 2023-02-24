@@ -130,6 +130,7 @@ class Session extends app\common\Entity
 
     try {
       $payload = JWT::decode($args['refresh_token'], new Key($args['refresh_token_salt'], 'HS256'));
+
       return Session::build([
         'access_token_salt' => $args['access_token_salt'],
         'refresh_token_salt' => $args['refresh_token_salt'],

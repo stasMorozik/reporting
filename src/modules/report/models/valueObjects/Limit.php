@@ -6,7 +6,7 @@ use app;
 
 class Limit extends app\common\valueObjects\ValueObject
 {
-  public function __construct(string $email)
+  public function __construct(int $email)
   {
     parent::__construct($email);
   }
