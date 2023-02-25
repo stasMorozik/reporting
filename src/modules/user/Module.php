@@ -71,5 +71,11 @@ class Module extends \yii\base\Module
       $authorization_use_case,
       $refresh_session_use_case
     ]);
+
+    $authorization_service = yii::$container->get('app\modules\user\services\Authorization');
+
+    yii::$container->setSingleton('app\modules\user\services\IsAuthorized', 'app\modules\user\services\IsAuthorized', [
+      $authorization_service
+    ]);
   }
 }

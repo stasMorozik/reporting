@@ -8,11 +8,11 @@ use DateDateTime;
 class GettingList
 {
 
-  private app\modules\user\useCases\interfaces\Authorization $authorization_use_case;
+  private app\modules\user\useCases\Authorization $authorization_use_case;
   private app\modules\report\activeQueries\GettingList $getting_adapter;
 
   public function __construct(
-    app\modules\user\useCases\interfaces\Authorization $authorization_use_case,
+    app\modules\user\useCases\Authorization $authorization_use_case,
     app\modules\report\activeQueries\GettingList $getting_adapter
   )
   {
@@ -26,16 +26,16 @@ class GettingList
   {
     $maybe_user = $this->authorization_use_case->auth($args);
 
-    if (!isset($args['page']) || !isset($args['limit'])) {
-      return new app\common\errors\Domain('Invalid argument');
-    }
-
     if (($maybe_user instanceof app\modules\user\models\Entity) == false) {
       return $maybe_user;
     }
 
     if (!$maybe_user->isAdmin()) {
       return new app\common\errors\HaveNotRight('You have not rights');
+    }
+
+    if (!isset($args['page']) || !isset($args['limit'])) {
+      return new app\common\errors\Domain('Invalid argument');
     }
 
     $maybe_page = app\modules\report\models\valueObjects\Page::build(['page' => $args['page']]);

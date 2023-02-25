@@ -23,10 +23,8 @@ class DefaultController extends yii\web\Controller
   public function actionIndex()
   {
     if (yii::$app->request->isGet) {
-      $this->service->get(yii::$app->request->get());
-      return $this->render('index', ['result' => [
-        'user' => null
-      ]]);
+      $result = $this->service->get(yii::$app->request->get());
+      return $this->render('index', ['result' => $result]);
     }
   }
 }

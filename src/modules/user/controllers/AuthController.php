@@ -7,23 +7,23 @@ use app;
 
 class AuthController extends yii\web\Controller
 {
-  protected app\modules\user\services\Authorization $authorization_service;
+  private app\modules\user\services\IsAuthorized $is_authorized_service;
 
   public function __construct(
     $id,
     $module,
-    app\modules\user\services\Authorization $authorization_service,
+    app\modules\user\services\IsAuthorized $is_authorized_service,
     $config = []
   )
   {
-    $this->authorization_service = $authorization_service;
+    $this->is_authorized_service = $is_authorized_service;
     parent::__construct($id, $module, $config);
   }
 
   public function actionIndex()
   {
     if (yii::$app->request->isGet) {
-      $this->authorization_service->auth();
+      $this->is_authorized_service->is();
       return $this->render('index', ['result' => yii::$app->request->get()]);
     }
   }

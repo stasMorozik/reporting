@@ -18,22 +18,10 @@ class Module extends \yii\base\Module
 
     $getting_list_adapter = yii::$container->get('app\modules\report\activeQueries\GettingList');
 
-    $users = [];
-
-    yii::$container->setSingleton('app\common\adapters\GettingUserById', 'app\common\adapters\GettingUserById', [
-      $users
-    ]);
-
-    $getting_user_by_id_adapter = yii::$container->get('app\common\adapters\GettingUserById');
-
-    yii::$container->setSingleton('app\common\useCases\Authorization', 'app\common\useCases\Authorization', [
-      $getting_user_by_id_adapter
-    ]);
-
-    $local_authorization_use_case = yii::$container->get('app\common\useCases\Authorization');
+    $authorization_use_case = yii::$container->get('app\modules\user\useCases\Authorization');
 
     yii::$container->setSingleton('app\modules\report\useCases\GettingList', 'app\modules\report\useCases\GettingList', [
-      $local_authorization_use_case,
+      $authorization_use_case,
       $getting_list_adapter
     ]);
 
@@ -41,8 +29,14 @@ class Module extends \yii\base\Module
 
     $authorization_service = yii::$container->get('app\modules\user\services\Authorization');
 
+    yii::$container->setSingleton('app\modules\report\services\IsAuthorized', 'app\modules\report\services\IsAuthorized', [
+      $authorization_service
+    ]);
+
+    $is_authorized_service = yii::$container->get('app\modules\report\services\IsAuthorized');
+
     yii::$container->setSingleton('app\modules\report\services\GettingList', 'app\modules\report\services\GettingList', [
-      $authorization_service,
+      $is_authorized_service,
       $getting_list_use_case
     ]);
   }

@@ -8,7 +8,7 @@ use Exception;
 use DateTime;
 use Ramsey\Uuid\Uuid;
 
-class GettingById implements app\modules\user\activeQueries\interfaces\GettingById
+class GettingById
 {
   private yii\db\Connection $db;
 

@@ -8,11 +8,11 @@ use Exception;
 
 class Authorization
 {
-  private app\modules\user\useCases\interfaces\Authorization $authorization_use_case;
+  private app\modules\user\useCases\Authorization $authorization_use_case;
   private app\modules\user\useCases\RefreshSession $refresh_session_use_case;
 
   public function __construct(
-    app\modules\user\useCases\interfaces\Authorization $authorization_use_case,
+    app\modules\user\useCases\Authorization $authorization_use_case,
     app\modules\user\useCases\RefreshSession $refresh_session_use_case
   )
   {
@@ -20,29 +20,7 @@ class Authorization
     $this->refresh_session_use_case = $refresh_session_use_case;
   }
 
-  public function auth(bool $is_auth = false)
-  {
-    $maybe_user = $this->_auth();
-    if (!$is_auth) {
-      if ($maybe_user instanceof app\modules\user\models\Entity) {
-        yii::$app->response->redirect([
-          '/reports/'
-        ]);
-      }
-    }
-
-    if ($is_auth) {
-      if (($maybe_user instanceof app\modules\user\models\Entity) == false) {
-        yii::$app->response->redirect([
-          '/users/auth',
-          'success' => false,
-          'message' => $maybe_user->getMessage()
-        ]);
-      }
-    }
-  }
-
-  private function _auth()
+  public function auth()
   {
     try {
       $session = yii::$app->session;
