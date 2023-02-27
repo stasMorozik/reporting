@@ -22,12 +22,12 @@ class GettingList
 
   public function get(
     array $args
-  ): app\common\errors\HaveNotRight | app\common\errors\Domain | app\common\errors\Infrastructure | array
+  ): app\common\errors\HaveNotRight | app\common\errors\Domain | app\common\errors\Infrastructure | app\common\errors\Unauthorized | array
   {
     $maybe_user = $this->authorization_use_case->auth($args);
 
     if (($maybe_user instanceof app\modules\user\models\Entity) == false) {
-      return $maybe_user;
+      return new app\common\errors\Unauthorized($maybe_user->getMessage());
     }
 
     if (!$maybe_user->isAdmin()) {

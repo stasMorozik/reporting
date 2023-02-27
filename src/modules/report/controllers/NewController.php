@@ -7,29 +7,36 @@ use app;
 
 class NewController extends yii\web\Controller
 {
-  protected app\modules\report\services\IsAuthorized $is_authorized_service;
+  private app\modules\user\services\Authorization $authorization_service;
 
   public function __construct(
     $id,
     $module,
-    app\modules\report\services\IsAuthorized $is_authorized_service,
+    app\modules\user\services\Authorization $authorization_service,
     $config = []
   )
   {
-    $this->is_authorized_service = $is_authorized_service;
+    $this->authorization_service = $authorization_service;
     parent::__construct($id, $module, $config);
   }
 
   public function actionIndex()
   {
     if (yii::$app->request->isGet) {
-      $this->is_authorized_service->is();
-      $authorization_use_case = yii::$container->get('app\modules\user\useCases\Authorization');
+      $maybe_user = $this->authorization_service->auth();
 
-      return $this->render('index', ['result' => array_merge(
-        yii::$app->request->get(),
-        ['user' => $authorization_use_case->getUser()]
-      )]);
+      if ($maybe_user instanceof app\modules\user\models\Entity) {
+        return $this->render('index', ['result' => array_merge(
+          yii::$app->request->get(),
+          ['user' => $maybe_user]
+        )]);
+      }
+
+      if (($maybe_user instanceof app\modules\user\models\Entity) == false) {
+        yii::$app->response->redirect([
+          '/users/new/'
+        ]);
+      }
     }
   }
 }

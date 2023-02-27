@@ -22,8 +22,8 @@ build_tests:
 tests:
   docker run --rm --name reporting_tests -v /projects/reporting:/tests reporting_tests
 
-build:
+build_dev:
   docker build -f Dockerfile ./  -t reporting_app
 
-run:
+dev_run:
   docker run --rm --name reporting_app -v /projects/reporting:/reporting_app reporting_app

@@ -27,17 +27,29 @@ class Module extends \yii\base\Module
 
     $getting_list_use_case = yii::$container->get('app\modules\report\useCases\GettingList');
 
-    $authorization_service = yii::$container->get('app\modules\user\services\Authorization');
-
-    yii::$container->setSingleton('app\modules\report\services\IsAuthorized', 'app\modules\report\services\IsAuthorized', [
-      $authorization_service
-    ]);
-
-    $is_authorized_service = yii::$container->get('app\modules\report\services\IsAuthorized');
+    $refresh_session_use_case = yii::$container->get('app\modules\user\useCases\RefreshSession');
 
     yii::$container->setSingleton('app\modules\report\services\GettingList', 'app\modules\report\services\GettingList', [
-      $is_authorized_service,
+      $refresh_session_use_case,
       $getting_list_use_case
+    ]);
+
+    yii::$container->setSingleton('app\modules\report\activeQueries\Creating', 'app\modules\report\activeQueries\Creating', [
+      yii::$app->db
+    ]);
+
+    $creating_adapter = yii::$container->get('app\modules\report\activeQueries\Creating');
+
+    yii::$container->setSingleton('app\modules\report\useCases\Creating', 'app\modules\report\useCases\Creating', [
+      $authorization_use_case,
+      $creating_adapter
+    ]);
+
+    $creating_use_case = yii::$container->get('app\modules\report\useCases\Creating');
+
+    yii::$container->setSingleton('app\modules\report\services\Creating', 'app\modules\report\services\Creating', [
+      $refresh_session_use_case,
+      $creating_use_case
     ]);
   }
 }

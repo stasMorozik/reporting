@@ -13,7 +13,7 @@ class Authorization
 
   public function __construct(
     app\modules\user\useCases\Authorization $authorization_use_case,
-    app\modules\user\useCases\RefreshSession $refresh_session_use_case
+    app\modules\user\useCases\RefreshSession $refresh_session_use_case,
   )
   {
     $this->authorization_use_case = $authorization_use_case;
@@ -41,9 +41,11 @@ class Authorization
         $session->set('access_token', $maybe_session->getAccessToken());
         $session->set('refresh_token', $maybe_session->getRefreshToken());
 
-        return $this->authorization_use_case->auth([
+        $maybe_user = $this->authorization_use_case->auth([
           'access_token' => $maybe_session->getAccessToken()
         ]);
+
+        return $maybe_user;
       }
 
       return $maybe_user;

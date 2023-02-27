@@ -50,6 +50,10 @@ class Entity extends app\common\Entity
       }
     }
 
+    if (!$args['title']) {
+      return new app\common\errors\Domain('Invalid title');
+    }
+
     if (($args['owner'] instanceof app\modules\user\models\Entity) == false) {
       return new app\common\errors\Domain('Invalid user');
     }

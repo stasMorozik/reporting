@@ -3,8 +3,13 @@ use yii\helpers\Html;
 ?>
 <div class="my-5 d-flex justify-content-center">
   <div class="col-xxl-4 col-xl-4 col-lg-4 col-12">
-    <?php if(isset($result['message'])) : ?>
+    <?php if(isset($result['message']) && $result['success'] == false): ?>
       <div class="alert alert-warning" role="alert">
+        <?= Html::encode($result['message']) ?>
+      </div>
+    <?php endif; ?>
+    <?php if(isset($result['message']) && $result['success'] == true): ?>
+      <div class="alert alert-success" role="alert">
         <?= Html::encode($result['message']) ?>
       </div>
     <?php endif; ?>

@@ -190,4 +190,19 @@ class GettingListTest extends TestCase
       $maybe_rows
     );
   }
+
+  public function testInvalidToken(): void
+  {
+    $maybe_rows = self::$getting_list_use_case->get([
+      'access_token' => 'Invalid token',
+      'page' => 1,
+      'limit' => 10,
+      'email' => self::$email
+    ]);
+
+    $this->assertInstanceOf(
+      app\common\errors\Unauthorized::class,
+      $maybe_rows
+    );
+  }
 }

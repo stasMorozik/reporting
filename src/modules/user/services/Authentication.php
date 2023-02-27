@@ -37,7 +37,7 @@ class Authentication
         $session->set('access_token', $maybe_session->getAccessToken());
         $session->set('refresh_token', $maybe_session->getRefreshToken());
 
-        yii::$app->response->redirect(['/reports/']);
+        yii::$app->response->redirect(['/reports/', 'page' => 1, 'limit' => 10]);
       }
     } catch(Exception $e) {
       yii::$app->response->redirect([
